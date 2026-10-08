@@ -226,8 +226,3 @@ SolarPulse AI — Turning solar monitoring data into smarter maintenance decisio
 
 
 
-<img src="https://raw.githubusercontent.com/Pradhee22/SolarPulse-AI/main/alerts.png" alt="System Fault Alerts" width="100%">
-
-### 7. Platform & Sensor Settings
-
-<img src="https://raw.githubusercontent.com/Pradhee22/SolarPulse-AI/main/setting.png" alt="Platform and Sensor Settings" width="100%">
