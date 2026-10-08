@@ -227,22 +227,29 @@ SolarPulse AI — Turning solar monitoring data into smarter maintenance decisio
 ## 📸 Project Screenshots
 
 ### 1. Dashboard
-![SolarPulse AI Dashboard](dashboard.png)
+
+<img src="https://raw.githubusercontent.com/Pradhee22/SolarPulse-AI/main/dashboard.png" alt="SolarPulse AI Dashboard" width="100%">
 
 ### 2. Real-Time Sensor Telemetry
-![Real-Time Sensor Telemetry](dashboardremaining.png)
+
+<img src="https://raw.githubusercontent.com/Pradhee22/SolarPulse-AI/main/dashboardremaining.png" alt="Real-Time Sensor Telemetry" width="100%">
 
 ### 3. Analytics
-![SolarPulse AI Analytics](analytics.png)
+
+<img src="https://raw.githubusercontent.com/Pradhee22/SolarPulse-AI/main/analytics.png" alt="SolarPulse AI Analytics" width="100%">
 
 ### 4. AI Thermal Inspection
-![AI Thermal Inspection](ai-scan.png)
+
+<img src="https://raw.githubusercontent.com/Pradhee22/SolarPulse-AI/main/ai-scan.png" alt="AI Thermal Inspection" width="100%">
 
 ### 5. Maintenance Operations
-![Maintenance Operations](maintenance.png)
+
+<img src="https://raw.githubusercontent.com/Pradhee22/SolarPulse-AI/main/maintenance.png" alt="Maintenance Operations" width="100%">
 
 ### 6. System Fault Alerts
-![System Fault Alerts](alerts.png)
+
+<img src="https://raw.githubusercontent.com/Pradhee22/SolarPulse-AI/main/alerts.png" alt="System Fault Alerts" width="100%">
 
 ### 7. Platform & Sensor Settings
-![Platform and Sensor Settings](setting.png)
+
+<img src="https://raw.githubusercontent.com/Pradhee22/SolarPulse-AI/main/setting.png" alt="Platform and Sensor Settings" width="100%">
