@@ -13,6 +13,7 @@ Solar operators therefore need a system that can:
 - Support thermal inspection
 - Prioritize panels requiring attention
 - Convert detected anomalies into maintenance actions
+
 💡 Solution
 SolarPulse AI provides a centralized monitoring and inspection platform combining:
 - ⚡ Electrical monitoring
@@ -23,6 +24,7 @@ SolarPulse AI provides a centralized monitoring and inspection platform combinin
 - 🚨 Intelligent alerts
 - 🔧 Maintenance management
 The goal is to help solar operators move from reactive inspection toward smarter, data-driven maintenance.
+
 🤖 AI Thermal Inspection
 Thermal inspection is a key component of SolarPulse AI.
 Thermal images can reveal abnormal temperature regions that may indicate potential solar-panel faults.
@@ -55,46 +57,25 @@ Potential classifications include:
 - Water droplets
 The current prototype demonstrates the thermal-inspection workflow using a sample thermal image and dashboard-based classification display. The architecture is designed for integration with a trained computer-vision model and real thermal-camera data.
 
-⚙️ Technical Architecture
-                    SOLAR PV PANEL
-                          │
-            ┌─────────────┴─────────────┐
-            │                           │
-            ▼                           ▼
-     Electrical Data             Environmental Data
-            │                           │
-       ┌────┴────┐              ┌───────┼────────┐
-       │         │              │       │        │
-    Voltage    Current       Irradiance Temp   Humidity
-       │         │              │       │        │
-       └────┬────┘              └───────┬────────┘
-            │                           │
-            └─────────────┬─────────────┘
-                          │
-                          ▼
-                    IoT / Edge Layer
-                       ESP32
-                          │
-                          ▼
-                 SolarPulse AI Platform
-                          │
-       ┌──────────────────┼──────────────────┐
-       │                  │                  │
-       ▼                  ▼                  ▼
-   Dashboard          Analytics          Thermal AI
-       │                  │                  │
-       │                  │             Thermal Image
-       │                  │                  │
-       │                  │                  ▼
-       │                  │          Computer Vision
-       │                  │                  │
-       └──────────────────┼──────────────────┘
-                          ▼
-                   Anomaly Detection
-                          │
-              ┌───────────┴───────────┐
-              ▼                       ▼
-           Alerts                Maintenance
+
+             ## ⚙️ Technical Architecture
+
+Solar PV Panel
+      ↓
+Electrical & Environmental Sensors
+      ↓
+ESP32 / IoT Edge Layer
+      ↓
+SolarPulse AI Platform
+      ↓
+Dashboard + Analytics + Thermal Inspection
+      ↓
+AI / Computer Vision
+      ↓
+Anomaly Detection
+      ↓
+Alerts & Maintenance Recommendations         
+      
 
 🔧 Technologies & Components
 Software
@@ -104,6 +85,7 @@ Software
 - Chart.js
 - Material Symbols
 - Responsive Web Design
+
 Proposed Hardware Architecture
 - ESP32
 - INA226 voltage/current/power sensor
@@ -112,6 +94,7 @@ Proposed Hardware Architecture
 - MLX90640 thermal camera
 - Raspberry Pi for thermal-image processing
 The current dashboard operates in demonstration mode using simulated telemetry so the complete monitoring workflow can be demonstrated without physical sensor hardware.
+
 📊 Dashboard Features
 Dashboard
 Provides an overview of:
@@ -124,9 +107,11 @@ Provides an overview of:
 - Humidity
 - Pressure
 - Solar Array Health
+
 Analytics
 Visualizes telemetry trends and performance information.
 AI Scan
+
 Displays:
 - Thermal image
 - Detected condition
@@ -140,12 +125,14 @@ Alerts
 Displays prioritized abnormal-condition notifications.
 Settings
 Provides dashboard configuration and interface controls.
+
 🎯 Target Users
 - Solar farm operators
 - Solar plant maintenance teams
 - Renewable-energy technicians
 - Solar asset managers
 - Solar inspection teams
+
 🌱 Real-World Impact
 SolarPulse AI is designed to support smarter solar maintenance by helping operators:
 - Detect abnormal panel conditions earlier
@@ -154,6 +141,7 @@ SolarPulse AI is designed to support smarter solar maintenance by helping operat
 - Prioritize critical faults
 - Reduce potential energy losses
 - Scale monitoring across larger solar installations
+
 💡 Innovation
 SolarPulse AI combines:
 Electrical Monitoring
