@@ -157,6 +157,7 @@ Risk Prioritization
 Maintenance Workflow
 
 Instead of displaying sensor values alone, the platform aims to turn measurements and thermal observations into actionable information for maintenance teams.
+
 🔬 Current Prototype vs Future System
 Feature	Current Prototype	Future Integration
 Dashboard	✅ Implemented	—
@@ -185,6 +186,7 @@ Raspberry Pi	Architecture	Edge AI deployment
 - Multi-panel and multi-site monitoring
 - Drone or rover-based thermal inspection
 - Automated maintenance notifications
+
 🏃 How to Run
 1. Clone or download this repository.
 2. Open the project folder.
@@ -192,6 +194,7 @@ Raspberry Pi	Architecture	Edge AI deployment
 4. The dashboard starts in demonstration mode.
 5. Explore Dashboard, Analytics, AI Scan, Maintenance, Alerts, and Settings.
 No backend server is required for the current prototype.
+
 📁 Project Structure
 SolarPulse-AI/
 │
@@ -220,3 +223,26 @@ Predictive Analytics
 Smarter Solar Maintenance
 
 SolarPulse AI — Turning solar monitoring data into smarter maintenance decisions.
+
+## 📸 Project Screenshots
+
+### 1. Dashboard
+![SolarPulse AI Dashboard](dashboard.png)
+
+### 2. Real-Time Sensor Telemetry
+![Real-Time Sensor Telemetry](dashboardremaining.png)
+
+### 3. Analytics
+![SolarPulse AI Analytics](analytics.png)
+
+### 4. AI Thermal Inspection
+![AI Thermal Inspection](ai-scan.png)
+
+### 5. Maintenance Operations
+![Maintenance Operations](maintenance.png)
+
+### 6. System Fault Alerts
+![System Fault Alerts](alerts.png)
+
+### 7. Platform & Sensor Settings
+![Platform and Sensor Settings](setting.png)
