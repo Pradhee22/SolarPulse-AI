@@ -1,0 +1,1165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SolarPulse AI | Smart Solar Panel Predictive Monitoring</title>
+  <meta name="description" content="AI-Powered Solar Panel Predictive Monitoring, Telemetry & Fault Detection Dashboard">
+  
+  <!-- Google Fonts: Inter & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Material Symbols Outlined -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+  
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="theme-dark">
+  <div class="app-layout">
+    
+    <!-- ================= FIXED TOP HEADER ================= -->
+    <header class="app-header">
+      <div class="header-left">
+        <div class="brand-container">
+          <div class="brand-icon-wrapper">
+            <span class="material-symbols-outlined brand-pulse-icon">solar_power</span>
+            <span class="pulse-ring"></span>
+          </div>
+          <div class="brand-text">
+            <div class="brand-title">SolarPulse <span class="brand-badge-ai">AI</span></div>
+            <div class="brand-subtitle">AI-Powered Solar Monitoring & Fault Detection</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="header-center">
+        <!-- Panel Selector -->
+        <div class="header-control-group">
+          <label for="panelSelect" class="control-label">
+            <span class="material-symbols-outlined icon-sm">solar_power</span> Array
+          </label>
+          <select id="panelSelect" class="styled-select" aria-label="Select Solar Panel">
+            <option value="SP-A104" selected>SP-A104 (Monitored)</option>
+            <option value="SP-A101">SP-A101</option>
+            <option value="SP-A102">SP-A102</option>
+            <option value="SP-B201">SP-B201</option>
+          </select>
+        </div>
+
+        <!-- Weather Preset Selector -->
+        <div class="header-control-group">
+          <label for="weatherPreset" class="control-label">
+            <span class="material-symbols-outlined icon-sm">sunny</span> Preset
+          </label>
+          <select id="weatherPreset" class="styled-select" aria-label="Select Weather Preset">
+            <option value="clear" selected>Clear Sky</option>
+            <option value="partly_cloudy">Partly Cloudy</option>
+            <option value="overcast">Overcast</option>
+            <option value="peak_summer">Peak Summer</option>
+            <option value="monsoon">Monsoon</option>
+          </select>
+        </div>
+
+        <!-- Quick AI Scan Button -->
+        <button id="headerAiScanBtn" class="btn btn-emerald-glass" data-section="aiscan" type="button">
+          <span class="material-symbols-outlined icon-sm">document_scanner</span>
+          <span>AI Scan</span>
+        </button>
+      </div>
+
+      <div class="header-right">
+        <!-- Live Hardware / Demo Indicator -->
+        <div id="liveStatusPill" class="status-pill status-demo">
+          <span class="status-dot"></span>
+          <span id="liveStatusText" class="status-text">Demo Mode</span>
+        </div>
+
+        <!-- Notifications Bell -->
+        <button id="headerAlertsBtn" class="header-icon-btn" data-section="alerts" type="button" aria-label="Notifications" title="Alerts">
+          <span class="material-symbols-outlined">notifications</span>
+          <span id="headerAlertBadge" class="notification-badge">3</span>
+        </button>
+
+        <!-- Theme Toggle -->
+        <button id="themeToggleBtn" class="header-icon-btn" type="button" aria-label="Toggle Theme" title="Toggle Light/Dark Theme">
+          <span id="themeToggleIcon" class="material-symbols-outlined">light_mode</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- ================= FIXED LEFT SIDEBAR ================= -->
+    <aside class="app-sidebar" id="sidebar">
+      <div class="sidebar-nav-container">
+        <ul class="nav-list">
+          <li class="nav-item">
+            <a href="#dashboard" class="nav-link active" data-section="dashboard" id="nav-dashboard">
+              <span class="material-symbols-outlined nav-icon">dashboard</span>
+              <span class="nav-label">Dashboard</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="#analytics" class="nav-link" data-section="analytics" id="nav-analytics">
+              <span class="material-symbols-outlined nav-icon">monitoring</span>
+              <span class="nav-label">Analytics</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="#aiscan" class="nav-link" data-section="aiscan" id="nav-aiscan">
+              <span class="material-symbols-outlined nav-icon">document_scanner</span>
+              <span class="nav-label">AI Scan</span>
+              <span class="badge badge-emerald">ML</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="#maintenance" class="nav-link" data-section="maintenance" id="nav-maintenance">
+              <span class="material-symbols-outlined nav-icon">build</span>
+              <span class="nav-label">Maintenance</span>
+              <span class="badge badge-amber" id="sidebarMaintBadge">2</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="#alerts" class="nav-link" data-section="alerts" id="nav-alerts">
+              <span class="material-symbols-outlined nav-icon">warning</span>
+              <span class="nav-label">Alerts</span>
+              <span class="badge badge-red" id="sidebarAlertsBadge">3</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="#settings" class="nav-link" data-section="settings" id="nav-settings">
+              <span class="material-symbols-outlined nav-icon">settings</span>
+              <span class="nav-label">Settings</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <div class="sidebar-footer">
+        <div class="system-health-mini">
+          <div class="system-meta-row">
+            <span class="text-muted">Node</span>
+            <span class="font-mono text-emerald">ESP32-A104</span>
+          </div>
+          <div class="system-meta-row">
+            <span class="text-muted">Thermal Cam</span>
+            <span class="text-slate">MLX90640 (I²C)</span>
+          </div>
+          <div class="system-meta-row">
+            <span class="text-muted">Sampling</span>
+            <span class="font-mono text-slate" id="sidebarIntervalDisplay">2.5s</span>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- ================= MAIN CONTENT AREA ================= -->
+    <main class="app-main" id="mainContent">
+      
+      <!-- ================= 1. DASHBOARD PAGE ================= -->
+      <section class="page-section active" id="section-dashboard">
+        <div class="section-hero">
+          <div class="hero-content">
+            <div class="hero-badge">
+              <span class="material-symbols-outlined icon-xs text-emerald">verified</span>
+              <span>Industrial Photovoltaic SCADA Telemetry</span>
+            </div>
+            <h1 class="hero-title">Photovoltaic Array Telemetry & Thermal ML Diagnostics</h1>
+            <p class="hero-description">Real-time monitoring of solar panel electrical, environmental and thermal conditions.</p>
+          </div>
+          <div class="hero-actions">
+            <div class="timestamp-display">
+              <span class="material-symbols-outlined icon-xs text-muted">schedule</span>
+              <span id="liveTimestamp" class="font-mono">--:--:--</span>
+            </div>
+            <button class="btn btn-secondary btn-sm" id="btnRefreshData" type="button" title="Refresh Live Readings">
+              <span class="material-symbols-outlined icon-xs">refresh</span>
+              <span>Sync Now</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- 8 PRIMARY KPI CARDS -->
+        <div class="kpi-grid">
+          <!-- Voltage -->
+          <div class="kpi-card" id="kpi-voltage-card">
+            <div class="kpi-header">
+              <span class="kpi-title">Voltage</span>
+              <span class="material-symbols-outlined kpi-icon text-blue">bolt</span>
+            </div>
+            <div class="kpi-value-container">
+              <span class="kpi-value font-mono" id="kpi-voltage">38.6</span>
+              <span class="kpi-unit">V</span>
+            </div>
+            <div class="kpi-footer">
+              <span class="kpi-delta text-emerald" id="kpi-voltage-delta">+0.4%</span>
+              <span class="kpi-subtext">Nominal 36-42V</span>
+            </div>
+          </div>
+
+          <!-- Current -->
+          <div class="kpi-card" id="kpi-current-card">
+            <div class="kpi-header">
+              <span class="kpi-title">Current</span>
+              <span class="material-symbols-outlined kpi-icon text-amber">electric_meter</span>
+            </div>
+            <div class="kpi-value-container">
+              <span class="kpi-value font-mono" id="kpi-current">5.64</span>
+              <span class="kpi-unit">A</span>
+            </div>
+            <div class="kpi-footer">
+              <span class="kpi-delta text-emerald" id="kpi-current-delta">+1.2%</span>
+              <span class="kpi-subtext">MPPT Tracking</span>
+            </div>
+          </div>
+
+          <!-- Power -->
+          <div class="kpi-card kpi-card-highlight" id="kpi-power-card">
+            <div class="kpi-header">
+              <span class="kpi-title">Power Output</span>
+              <span class="material-symbols-outlined kpi-icon text-emerald">power</span>
+            </div>
+            <div class="kpi-value-container">
+              <span class="kpi-value font-mono text-emerald" id="kpi-power">217.7</span>
+              <span class="kpi-unit">W</span>
+            </div>
+            <div class="kpi-footer">
+              <span class="kpi-delta text-emerald" id="kpi-power-delta">V × I Active</span>
+              <span class="kpi-subtext">Max Rating 250W</span>
+            </div>
+          </div>
+
+          <!-- Efficiency -->
+          <div class="kpi-card" id="kpi-efficiency-card">
+            <div class="kpi-header">
+              <span class="kpi-title">Efficiency</span>
+              <span class="material-symbols-outlined kpi-icon text-emerald">speed</span>
+            </div>
+            <div class="kpi-value-container">
+              <span class="kpi-value font-mono" id="kpi-efficiency">19.5</span>
+              <span class="kpi-unit">%</span>
+            </div>
+            <div class="kpi-footer">
+              <span class="kpi-delta text-emerald" id="kpi-efficiency-delta">Derived ML</span>
+              <span class="kpi-subtext">STC Baseline 20.2%</span>
+            </div>
+          </div>
+
+          <!-- Irradiance -->
+          <div class="kpi-card" id="kpi-irradiance-card">
+            <div class="kpi-header">
+              <span class="kpi-title">Irradiance</span>
+              <span class="material-symbols-outlined kpi-icon text-amber">wb_sunny</span>
+            </div>
+            <div class="kpi-value-container">
+              <span class="kpi-value font-mono" id="kpi-irradiance">1048</span>
+              <span class="kpi-unit">W/m²</span>
+            </div>
+            <div class="kpi-footer">
+              <span class="kpi-delta text-slate" id="kpi-irradiance-delta">Peak Band</span>
+              <span class="kpi-subtext">Pyranometer ref</span>
+            </div>
+          </div>
+
+          <!-- Temperature -->
+          <div class="kpi-card" id="kpi-temperature-card">
+            <div class="kpi-header">
+              <span class="kpi-title">Temperature</span>
+              <span class="material-symbols-outlined kpi-icon text-red">thermostat</span>
+            </div>
+            <div class="kpi-value-container">
+              <span class="kpi-value font-mono" id="kpi-temperature">32.4</span>
+              <span class="kpi-unit">°C</span>
+            </div>
+            <div class="kpi-footer">
+              <span class="kpi-delta text-amber" id="kpi-temperature-delta">+1.8°C Amb</span>
+              <span class="kpi-subtext">BME280 Ambient</span>
+            </div>
+          </div>
+
+          <!-- Humidity -->
+          <div class="kpi-card" id="kpi-humidity-card">
+            <div class="kpi-header">
+              <span class="kpi-title">Humidity</span>
+              <span class="material-symbols-outlined kpi-icon text-blue">water_drop</span>
+            </div>
+            <div class="kpi-value-container">
+              <span class="kpi-value font-mono" id="kpi-humidity">58</span>
+              <span class="kpi-unit">%</span>
+            </div>
+            <div class="kpi-footer">
+              <span class="kpi-delta text-slate">Stable</span>
+              <span class="kpi-subtext">Relative Humidity</span>
+            </div>
+          </div>
+
+          <!-- Pressure -->
+          <div class="kpi-card" id="kpi-pressure-card">
+            <div class="kpi-header">
+              <span class="kpi-title">Pressure</span>
+              <span class="material-symbols-outlined kpi-icon text-slate">compress</span>
+            </div>
+            <div class="kpi-value-container">
+              <span class="kpi-value font-mono" id="kpi-pressure">1008</span>
+              <span class="kpi-unit">hPa</span>
+            </div>
+            <div class="kpi-footer">
+              <span class="kpi-delta text-slate">Barometric</span>
+              <span class="kpi-subtext">Altitude adjusted</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- ARRAY HEALTH & QUICK THERMAL SUMMARY -->
+        <div class="dashboard-middle-grid">
+          <!-- Solar Array Health Card -->
+          <div class="card health-card">
+            <div class="card-header">
+              <div class="card-title-group">
+                <span class="material-symbols-outlined text-emerald">health_and_safety</span>
+                <h2 class="card-title">Solar Array Health</h2>
+              </div>
+              <span class="badge badge-emerald-pill" id="healthStatusBadge">Optimal</span>
+            </div>
+            <div class="card-body">
+              <div class="health-overview">
+                <div class="health-score-container">
+                  <div class="health-score-value font-mono" id="healthScoreDisplay">87%</div>
+                  <div class="health-score-label">System Integrity</div>
+                </div>
+                <div class="health-details">
+                  <div class="health-bar-container">
+                    <div class="health-bar-track">
+                      <div class="health-bar-fill" id="healthProgressBar" style="width: 87%;"></div>
+                    </div>
+                  </div>
+                  <div class="health-metric-pills">
+                    <div class="metric-mini-pill">
+                      <span class="text-muted">Output:</span>
+                      <strong class="font-mono text-emerald" id="healthOutputDisplay">217.7 W</strong>
+                    </div>
+                    <div class="metric-mini-pill">
+                      <span class="text-muted">Efficiency:</span>
+                      <strong class="font-mono text-emerald" id="healthEffDisplay">19.5%</strong>
+                    </div>
+                    <div class="metric-mini-pill">
+                      <span class="text-muted">Status:</span>
+                      <strong class="text-emerald" id="healthStatusText">Optimal</strong>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="diagnostic-flags">
+                <div class="diag-flag-item">
+                  <span class="material-symbols-outlined icon-sm text-emerald">check_circle</span>
+                  <span>Inverter MPPT synchronized</span>
+                </div>
+                <div class="diag-flag-item">
+                  <span class="material-symbols-outlined icon-sm text-amber">warning</span>
+                  <span>Hotspot localized on Cell 14B</span>
+                </div>
+                <div class="diag-flag-item">
+                  <span class="material-symbols-outlined icon-sm text-emerald">check_circle</span>
+                  <span>Bypass diodes operational</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Quick AI Thermal Preview Card -->
+          <div class="card thermal-summary-card">
+            <div class="card-header">
+              <div class="card-title-group">
+                <span class="material-symbols-outlined text-red">local_fire_department</span>
+                <h2 class="card-title">AI Thermal Inspection (Active)</h2>
+              </div>
+              <button class="btn btn-emerald-glass btn-xs" data-section="aiscan" type="button">Open ML Scanner</button>
+            </div>
+            <div class="card-body thermal-summary-body">
+              <div class="thermal-thumb-wrapper">
+                <img src="thermal_scan.jpg" alt="Thermal Scan Preview" class="thermal-thumbnail" id="dashThermalThumb">
+                <div class="thumb-hotspot-pin" title="Hotspot 67.8°C"></div>
+                <div class="thumb-badge">SP-A104</div>
+              </div>
+              <div class="thermal-summary-data">
+                <div class="ts-row">
+                  <span class="ts-label">AI Classification:</span>
+                  <span class="ts-val text-red font-semibold" id="dashThermalClass">Hotspot Detected</span>
+                </div>
+                <div class="ts-row">
+                  <span class="ts-label">Confidence:</span>
+                  <span class="ts-val font-mono text-emerald" id="dashThermalConf">97%</span>
+                </div>
+                <div class="ts-row">
+                  <span class="ts-label">Risk Level:</span>
+                  <span class="badge badge-red" id="dashThermalRisk">HIGH</span>
+                </div>
+                <div class="ts-row">
+                  <span class="ts-label">Last Thermal Scan:</span>
+                  <span class="ts-val font-mono text-muted" id="dashThermalTime">Today, 14:32</span>
+                </div>
+                <button class="btn btn-primary btn-sm btn-block mt-2" id="dashQuickScanBtn" type="button">
+                  <span class="material-symbols-outlined icon-xs">document_scanner</span>
+                  <span>Run Thermal Diagnostics</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- CHARTS ROW: POWER & ENVIRONMENT -->
+        <div class="charts-double-grid">
+          <!-- Power Trend Chart -->
+          <div class="card chart-card">
+            <div class="card-header">
+              <div class="card-title-group">
+                <span class="material-symbols-outlined text-emerald">trending_up</span>
+                <h2 class="card-title">Real-Time Power Output Trend</h2>
+              </div>
+              <div class="chart-tag font-mono">P = V × I</div>
+            </div>
+            <div class="card-body">
+              <div class="chart-canvas-wrapper">
+                <canvas id="dashPowerChart"></canvas>
+              </div>
+            </div>
+          </div>
+
+          <!-- Environmental Chart -->
+          <div class="card chart-card">
+            <div class="card-header">
+              <div class="card-title-group">
+                <span class="material-symbols-outlined text-amber">cloud_sync</span>
+                <h2 class="card-title">Environmental Telemetry (Ambient & Solar)</h2>
+              </div>
+              <div class="chart-tag font-mono">BME280 + Sensor</div>
+            </div>
+            <div class="card-body">
+              <div class="chart-canvas-wrapper">
+                <canvas id="dashEnvChart"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- LIVE TELEMETRY TABLE -->
+        <div class="card table-card">
+          <div class="card-header">
+            <div class="card-title-group">
+              <span class="material-symbols-outlined text-blue">table_chart</span>
+              <h2 class="card-title">Live Sensor Telemetry Stream</h2>
+            </div>
+            <div class="table-stream-indicator">
+              <span class="status-dot"></span>
+              <span class="text-xs text-muted">Sampling active</span>
+            </div>
+          </div>
+          <div class="card-body p-0">
+            <div class="table-responsive">
+              <table class="telemetry-table" id="telemetryTable">
+                <thead>
+                  <tr>
+                    <th>Time</th>
+                    <th>Voltage (V)</th>
+                    <th>Current (A)</th>
+                    <th>Power (W)</th>
+                    <th>Efficiency (%)</th>
+                    <th>Irradiance (W/m²)</th>
+                    <th>Temperature (°C)</th>
+                  </tr>
+                </thead>
+                <tbody id="telemetryTableBody">
+                  <!-- Populated by JavaScript -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= 2. ANALYTICS PAGE ================= -->
+      <section class="page-section" id="section-analytics">
+        <div class="section-hero">
+          <div class="hero-content">
+            <div class="hero-badge">
+              <span class="material-symbols-outlined icon-xs text-emerald">analytics</span>
+              <span>Photovoltaic Deep Performance Telemetry</span>
+            </div>
+            <h1 class="hero-title">High-Resolution Analytical Diagnostics</h1>
+            <p class="hero-description">Detailed time-series telemetry metrics for Solar Panel Array SP-A104 across key electrical and environmental parameters.</p>
+          </div>
+          <div class="hero-actions">
+            <div class="segmented-control" id="analyticsRangeControl">
+              <button class="seg-btn active" data-range="1h" type="button">1H Live</button>
+              <button class="seg-btn" data-range="6h" type="button">6H</button>
+              <button class="seg-btn" data-range="24h" type="button">24H</button>
+              <button class="seg-btn" data-range="7d" type="button">7D</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 6 ANALYTICS CHARTS GRID -->
+        <div class="analytics-charts-grid">
+          <!-- 1. Power vs Time -->
+          <div class="card chart-card">
+            <div class="card-header">
+              <div class="card-title-group">
+                <span class="material-symbols-outlined text-emerald">flash_on</span>
+                <h3 class="card-title">Power vs Time</h3>
+              </div>
+              <span class="badge badge-emerald-subtle">Watts (W)</span>
+            </div>
+            <div class="card-body">
+              <div class="chart-canvas-wrapper">
+                <canvas id="analyticsPowerChart"></canvas>
+              </div>
+            </div>
+          </div>
+
+          <!-- 2. Voltage vs Time -->
+          <div class="card chart-card">
+            <div class="card-header">
+              <div class="card-title-group">
+                <span class="material-symbols-outlined text-blue">electric_bolt</span>
+                <h3 class="card-title">Voltage vs Time</h3>
+              </div>
+              <span class="badge badge-blue-subtle">Volts (V)</span>
+            </div>
+            <div class="card-body">
+              <div class="chart-canvas-wrapper">
+                <canvas id="analyticsVoltageChart"></canvas>
+              </div>
+            </div>
+          </div>
+
+          <!-- 3. Current vs Time -->
+          <div class="card chart-card">
+            <div class="card-header">
+              <div class="card-title-group">
+                <span class="material-symbols-outlined text-amber">electric_meter</span>
+                <h3 class="card-title">Current vs Time</h3>
+              </div>
+              <span class="badge badge-amber-subtle">Amperes (A)</span>
+            </div>
+            <div class="card-body">
+              <div class="chart-canvas-wrapper">
+                <canvas id="analyticsCurrentChart"></canvas>
+              </div>
+            </div>
+          </div>
+
+          <!-- 4. Efficiency vs Time -->
+          <div class="card chart-card">
+            <div class="card-header">
+              <div class="card-title-group">
+                <span class="material-symbols-outlined text-emerald">speed</span>
+                <h3 class="card-title">Efficiency vs Time</h3>
+              </div>
+              <span class="badge badge-emerald-subtle">Percentage (%)</span>
+            </div>
+            <div class="card-body">
+              <div class="chart-canvas-wrapper">
+                <canvas id="analyticsEfficiencyChart"></canvas>
+              </div>
+            </div>
+          </div>
+
+          <!-- 5. Temperature vs Time -->
+          <div class="card chart-card">
+            <div class="card-header">
+              <div class="card-title-group">
+                <span class="material-symbols-outlined text-red">thermostat</span>
+                <h3 class="card-title">Temperature vs Time</h3>
+              </div>
+              <span class="badge badge-red-subtle">Celsius (°C)</span>
+            </div>
+            <div class="card-body">
+              <div class="chart-canvas-wrapper">
+                <canvas id="analyticsTempChart"></canvas>
+              </div>
+            </div>
+          </div>
+
+          <!-- 6. Irradiance vs Time -->
+          <div class="card chart-card">
+            <div class="card-header">
+              <div class="card-title-group">
+                <span class="material-symbols-outlined text-amber">wb_sunny</span>
+                <h3 class="card-title">Irradiance vs Time</h3>
+              </div>
+              <span class="badge badge-amber-subtle">W/m²</span>
+            </div>
+            <div class="card-body">
+              <div class="chart-canvas-wrapper">
+                <canvas id="analyticsIrradianceChart"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= 3. AI SCAN PAGE ================= -->
+      <section class="page-section" id="section-aiscan">
+        <div class="section-hero">
+          <div class="hero-content">
+            <div class="hero-badge">
+              <span class="material-symbols-outlined icon-xs text-red">center_focus_strong</span>
+              <span>Computer Vision Thermographic Fault Classifier</span>
+            </div>
+            <h1 class="hero-title">AI Thermal Inspection & Hotspot Detection</h1>
+            <p class="hero-description">MLX90640 radiometric thermal imaging pipeline with localized convolutional fault diagnosis.</p>
+          </div>
+          <div class="hero-actions">
+            <!-- Hidden file input for uploading thermal scan -->
+            <input type="file" id="thermalImageUpload" accept="image/*" class="hidden-file-input">
+            <button class="btn btn-secondary" id="btnTriggerUpload" type="button">
+              <span class="material-symbols-outlined icon-xs">upload_file</span>
+              <span>Upload Thermal Image</span>
+            </button>
+            <button class="btn btn-primary" id="btnRunAiScan" type="button">
+              <span class="material-symbols-outlined icon-xs">play_arrow</span>
+              <span id="btnRunAiScanText">Run AI Thermal Scan</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="thermal-inspection-workspace">
+          <!-- Main Thermogram Viewer -->
+          <div class="card thermal-viewer-card">
+            <div class="card-header">
+              <div class="card-title-group">
+                <span class="material-symbols-outlined text-emerald">view_in_ar</span>
+                <h2 class="card-title">Thermogram Radiometric Viewport</h2>
+              </div>
+              <div class="thermal-meta-badge font-mono" id="scanPanelBadge">Array Target: SP-A104</div>
+            </div>
+            <div class="card-body p-0">
+              <div class="thermal-display-container" id="thermalDisplayContainer">
+                <img src="thermal_scan.jpg" alt="AI Solar Thermal Inspection" class="thermal-main-image" id="thermalMainImage">
+                
+                <!-- Scanning Laser Animation Line -->
+                <div class="scanner-laser-line" id="scannerLaserLine"></div>
+
+                <!-- AI Bounding Box Anomaly Overlay -->
+                <div class="ai-hotspot-box" id="aiHotspotBox">
+                  <div class="box-corner tl"></div>
+                  <div class="box-corner tr"></div>
+                  <div class="box-corner bl"></div>
+                  <div class="box-corner br"></div>
+                  <div class="hotspot-tag">
+                    <span class="material-symbols-outlined icon-xs">warning</span>
+                    <span>HOTSPOT #01 (67.8°C)</span>
+                  </div>
+                </div>
+
+                <!-- Scan Status Banner Overlay -->
+                <div class="scan-overlay-state" id="scanOverlayState">
+                  <div class="scanner-spinner"></div>
+                  <div class="scanner-status-text">Analyzing Radiometric Heat Matrix...</div>
+                  <div class="scanner-subtext font-mono">Running Inference: Convolutional Hotspot Locator v2.4</div>
+                </div>
+              </div>
+
+              <!-- Thermal Spectrum Legend -->
+              <div class="thermal-color-legend">
+                <div class="legend-scale-labels">
+                  <span>18.0°C (Cold/Ambient)</span>
+                  <span>45.0°C (Operating)</span>
+                  <span>70.0°C (Hotspot Critical)</span>
+                </div>
+                <div class="ironbow-gradient-bar"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- AI Model Diagnostic Details -->
+          <div class="thermal-sidebar-info">
+            <!-- Classification Card -->
+            <div class="card">
+              <div class="card-header">
+                <div class="card-title-group">
+                  <span class="material-symbols-outlined text-red">psychology</span>
+                  <h3 class="card-title">ML Inference Outcome</h3>
+                </div>
+                <span class="badge badge-red-pill" id="aiRiskPill">HIGH RISK</span>
+              </div>
+              <div class="card-body">
+                <div class="ai-diagnostic-rows">
+                  <div class="ai-row">
+                    <span class="ai-label">Target Panel ID:</span>
+                    <span class="ai-value font-mono text-emerald" id="aiPanelIdDisplay">SP-A104</span>
+                  </div>
+                  <div class="ai-row">
+                    <span class="ai-label">Last Thermal Scan:</span>
+                    <span class="ai-value font-mono" id="aiLastScanDisplay">Today</span>
+                  </div>
+                  <div class="ai-row">
+                    <span class="ai-label">AI Classification:</span>
+                    <span class="ai-value text-red font-bold" id="aiClassificationDisplay">Hotspot Detected</span>
+                  </div>
+                  <div class="ai-row">
+                    <span class="ai-label">Confidence:</span>
+                    <div class="conf-bar-group">
+                      <span class="ai-value font-mono text-emerald" id="aiConfidenceDisplay">97%</span>
+                      <div class="conf-bar-track">
+                        <div class="conf-bar-fill" id="aiConfidenceBar" style="width: 97%;"></div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="ai-row">
+                    <span class="ai-label">Defect Classification:</span>
+                    <span class="ai-value font-mono text-amber">Localized Shunting / Cell 14B</span>
+                  </div>
+                  <div class="ai-row">
+                    <span class="ai-label">Max Temperature:</span>
+                    <span class="ai-value font-mono text-red" id="aiMaxTempDisplay">67.8 °C</span>
+                  </div>
+                </div>
+
+                <div class="ai-recommendation-box">
+                  <div class="ai-rec-title">
+                    <span class="material-symbols-outlined text-amber icon-sm">lightbulb</span>
+                    <span>Predictive Action Advisory</span>
+                  </div>
+                  <p class="ai-rec-text">
+                    Localized hotspot exceeding STC maximum threshold by +35.4°C. Bypass diode trigger likely active. Prompt visual and connector audit recommended to prevent module delamination.
+                  </p>
+                </div>
+
+                <div class="mt-3">
+                  <button class="btn btn-emerald-glass btn-block" id="btnScheduleFromAi" type="button" data-section="maintenance">
+                    <span class="material-symbols-outlined icon-sm">build</span>
+                    <span>Forward to Maintenance Work-Order</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Architecture / Hardware Spec Card -->
+            <div class="card">
+              <div class="card-header">
+                <div class="card-title-group">
+                  <span class="material-symbols-outlined text-blue">memory</span>
+                  <h3 class="card-title">Vision Pipeline Pipeline Spec</h3>
+                </div>
+              </div>
+              <div class="card-body font-mono text-xs text-muted">
+                <div class="spec-list">
+                  <div class="spec-row">
+                    <span>SENSOR:</span>
+                    <span class="text-slate">MLX90640 Far-IR (32×24 array)</span>
+                  </div>
+                  <div class="spec-row">
+                    <span>FRAME RATE:</span>
+                    <span class="text-slate">8 Hz over I²C High Speed</span>
+                  </div>
+                  <div class="spec-row">
+                    <span>INFERENCE:</span>
+                    <span class="text-slate">Lightweight MobileNet-V2 / Edge ONNX</span>
+                  </div>
+                  <div class="spec-row">
+                    <span>STATUS:</span>
+                    <span class="text-emerald">Frontend Simulation / Ready for API</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= 4. MAINTENANCE PAGE ================= -->
+      <section class="page-section" id="section-maintenance">
+        <div class="section-hero">
+          <div class="hero-content">
+            <div class="hero-badge">
+              <span class="material-symbols-outlined icon-xs text-amber">handyman</span>
+              <span>Predictive & Preventive Maintenance Operations</span>
+            </div>
+            <h1 class="hero-title">Array Maintenance & Field Work Orders</h1>
+            <p class="hero-description">Autonomous prioritization of cleaning schedules, hot spot repairs, and array calibration tasks.</p>
+          </div>
+          <div class="hero-actions">
+            <button class="btn btn-primary" id="btnNewWorkOrder" type="button">
+              <span class="material-symbols-outlined icon-xs">add_task</span>
+              <span>New Work Order</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="maintenance-cards-grid" id="maintenanceCardsContainer">
+          <!-- Card 1: HOTSPOT DETECTED -->
+          <div class="card maint-card maint-card-high" id="maint-card-1">
+            <div class="card-header">
+              <div class="card-title-group">
+                <span class="material-symbols-outlined text-red">local_fire_department</span>
+                <h3 class="card-title">HOTSPOT DETECTED</h3>
+              </div>
+              <span class="badge badge-red">HIGH PRIORITY</span>
+            </div>
+            <div class="card-body">
+              <div class="maint-meta-grid">
+                <div class="maint-field">
+                  <span class="maint-label">Target Panel:</span>
+                  <strong class="maint-value font-mono text-emerald">SP-A104</strong>
+                </div>
+                <div class="maint-field">
+                  <span class="maint-label">Priority:</span>
+                  <strong class="maint-value text-red">HIGH</strong>
+                </div>
+                <div class="maint-field">
+                  <span class="maint-label">Status:</span>
+                  <span class="badge badge-amber maint-status-badge" id="maintStatus-1">Pending</span>
+                </div>
+                <div class="maint-field">
+                  <span class="maint-label">Reported:</span>
+                  <span class="maint-value font-mono text-muted">Oct 26, 14:32</span>
+                </div>
+              </div>
+              <div class="maint-recommendation">
+                <div class="rec-header">Recommendation:</div>
+                <p class="rec-body">Inspect affected panel and electrical connections. Check bypass diode and thermal hotspot on Cell 14B.</p>
+              </div>
+            </div>
+            <div class="card-footer maint-actions">
+              <button class="btn btn-secondary btn-sm" data-action="schedule-maint" data-maint-id="1" type="button">
+                <span class="material-symbols-outlined icon-xs">calendar_today</span>
+                <span>Schedule Maintenance</span>
+              </button>
+              <button class="btn btn-emerald-glass btn-sm" data-action="complete-maint" data-maint-id="1" type="button">
+                <span class="material-symbols-outlined icon-xs">check_circle</span>
+                <span>Mark Complete</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Card 2: DUST ACCUMULATION -->
+          <div class="card maint-card maint-card-med" id="maint-card-2">
+            <div class="card-header">
+              <div class="card-title-group">
+                <span class="material-symbols-outlined text-amber">waves</span>
+                <h3 class="card-title">DUST ACCUMULATION</h3>
+              </div>
+              <span class="badge badge-amber">MEDIUM PRIORITY</span>
+            </div>
+            <div class="card-body">
+              <div class="maint-meta-grid">
+                <div class="maint-field">
+                  <span class="maint-label">Target Panel:</span>
+                  <strong class="maint-value font-mono text-emerald">SP-A102</strong>
+                </div>
+                <div class="maint-field">
+                  <span class="maint-label">Priority:</span>
+                  <strong class="maint-value text-amber">MEDIUM</strong>
+                </div>
+                <div class="maint-field">
+                  <span class="maint-label">Status:</span>
+                  <span class="badge badge-blue maint-status-badge" id="maintStatus-2">Recommended</span>
+                </div>
+                <div class="maint-field">
+                  <span class="maint-label">Reported:</span>
+                  <span class="maint-value font-mono text-muted">Oct 26, 09:15</span>
+                </div>
+              </div>
+              <div class="maint-recommendation">
+                <div class="rec-header">Recommendation:</div>
+                <p class="rec-body">Schedule panel cleaning. Soiling index calculated at 6.4% output attenuation across northern string.</p>
+              </div>
+            </div>
+            <div class="card-footer maint-actions">
+              <button class="btn btn-secondary btn-sm" data-action="schedule-maint" data-maint-id="2" type="button">
+                <span class="material-symbols-outlined icon-xs">calendar_today</span>
+                <span>Schedule Maintenance</span>
+              </button>
+              <button class="btn btn-emerald-glass btn-sm" data-action="complete-maint" data-maint-id="2" type="button">
+                <span class="material-symbols-outlined icon-xs">check_circle</span>
+                <span>Mark Complete</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Card 3: INVERTER EFFICIENCY DRIFT -->
+          <div class="card maint-card maint-card-low" id="maint-card-3">
+            <div class="card-header">
+              <div class="card-title-group">
+                <span class="material-symbols-outlined text-blue">tune</span>
+                <h3 class="card-title">INVERTER CALIBRATION</h3>
+              </div>
+              <span class="badge badge-blue">LOW PRIORITY</span>
+            </div>
+            <div class="card-body">
+              <div class="maint-meta-grid">
+                <div class="maint-field">
+                  <span class="maint-label">Target Panel:</span>
+                  <strong class="maint-value font-mono text-emerald">SP-B201</strong>
+                </div>
+                <div class="maint-field">
+                  <span class="maint-label">Priority:</span>
+                  <strong class="maint-value text-blue">LOW</strong>
+                </div>
+                <div class="maint-field">
+                  <span class="maint-label">Status:</span>
+                  <span class="badge badge-emerald maint-status-badge" id="maintStatus-3">Scheduled</span>
+                </div>
+                <div class="maint-field">
+                  <span class="maint-label">Reported:</span>
+                  <span class="maint-value font-mono text-muted">Yesterday</span>
+                </div>
+              </div>
+              <div class="maint-recommendation">
+                <div class="rec-header">Recommendation:</div>
+                <p class="rec-body">Run micro-inverter MPPT loop calibration routine during overnight low-voltage standby window.</p>
+              </div>
+            </div>
+            <div class="card-footer maint-actions">
+              <button class="btn btn-secondary btn-sm" data-action="schedule-maint" data-maint-id="3" type="button">
+                <span class="material-symbols-outlined icon-xs">calendar_today</span>
+                <span>Schedule Maintenance</span>
+              </button>
+              <button class="btn btn-emerald-glass btn-sm" data-action="complete-maint" data-maint-id="3" type="button">
+                <span class="material-symbols-outlined icon-xs">check_circle</span>
+                <span>Mark Complete</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= 5. ALERTS PAGE ================= -->
+      <section class="page-section" id="section-alerts">
+        <div class="section-hero">
+          <div class="hero-content">
+            <div class="hero-badge">
+              <span class="material-symbols-outlined icon-xs text-red">notifications_active</span>
+              <span>Real-Time Incident Stream & Telemetry Anomalies</span>
+            </div>
+            <h1 class="hero-title">System Fault Alerts & Diagnostic Events</h1>
+            <p class="hero-description">Active hardware warnings, thermal threshold breaches, and electrical variances requiring operator review.</p>
+          </div>
+          <div class="hero-actions">
+            <button class="btn btn-danger-glass" id="btnClearAllAlerts" type="button">
+              <span class="material-symbols-outlined icon-xs">clear_all</span>
+              <span>Clear All Alerts</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="alerts-feed-container" id="alertsFeedContainer">
+          <!-- Alerts are rendered dynamically from app.state.alerts -->
+        </div>
+      </section>
+
+      <!-- ================= 6. SETTINGS PAGE ================= -->
+      <section class="page-section" id="section-settings">
+        <div class="section-hero">
+          <div class="hero-content">
+            <div class="hero-badge">
+              <span class="material-symbols-outlined icon-xs text-emerald">tune</span>
+              <span>Edge Telemetry & Hardware Node Configuration</span>
+            </div>
+            <h1 class="hero-title">Platform & Sensor Settings</h1>
+            <p class="hero-description">Configure sampling parameters, anomaly triggers, sensor thresholds, and hardware integration endpoints.</p>
+          </div>
+        </div>
+
+        <div class="settings-grid">
+          <!-- Dashboard UI Preferences -->
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title-group">
+                <span class="material-symbols-outlined text-emerald">palette</span>
+                <h3 class="card-title">Dashboard Appearance</h3>
+              </div>
+            </div>
+            <div class="card-body">
+              <div class="setting-item">
+                <div class="setting-info">
+                  <div class="setting-title">Color Theme</div>
+                  <div class="setting-desc">Toggle between high-contrast dark industrial theme and daylight mode</div>
+                </div>
+                <div class="theme-switch-group">
+                  <button class="btn btn-secondary btn-sm active" id="btnThemeDark" type="button">Dark Mode</button>
+                  <button class="btn btn-secondary btn-sm" id="btnThemeLight" type="button">Light Mode</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Data Simulation & Acquisition -->
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title-group">
+                <span class="material-symbols-outlined text-blue">sensors</span>
+                <h3 class="card-title">Telemetry & Data Acquisition</h3>
+              </div>
+            </div>
+            <div class="card-body">
+              <div class="setting-item">
+                <div class="setting-info">
+                  <div class="setting-title">Demo Simulation Engine</div>
+                  <div class="setting-desc">Generate realistic mathematical solar physics telemetry</div>
+                </div>
+                <label class="toggle-switch">
+                  <input type="checkbox" id="demoModeToggle" checked>
+                  <span class="toggle-slider"></span>
+                </label>
+              </div>
+
+              <div class="setting-item">
+                <div class="setting-info">
+                  <div class="setting-title">Telemetry Update Interval</div>
+                  <div class="setting-desc">Frequency of simulated sensor telemetry polling</div>
+                </div>
+                <select id="updateIntervalSelect" class="styled-select">
+                  <option value="1000">1.0 Second (Fast)</option>
+                  <option value="2000">2.0 Seconds</option>
+                  <option value="2500" selected>2.5 Seconds (Default)</option>
+                  <option value="5000">5.0 Seconds (Eco)</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <!-- Anomaly Alert Thresholds -->
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title-group">
+                <span class="material-symbols-outlined text-amber">tune</span>
+                <h3 class="card-title">Alert Thresholds</h3>
+              </div>
+            </div>
+            <div class="card-body">
+              <div class="threshold-input-row">
+                <label for="threshMinPower" class="thresh-label">Minimum Power (W)</label>
+                <div class="input-with-unit">
+                  <input type="number" id="threshMinPower" class="styled-input font-mono" value="80" min="0" max="300">
+                  <span class="input-unit">W</span>
+                </div>
+              </div>
+
+              <div class="threshold-input-row">
+                <label for="threshMinEfficiency" class="thresh-label">Minimum Efficiency (%)</label>
+                <div class="input-with-unit">
+                  <input type="number" id="threshMinEfficiency" class="styled-input font-mono" value="12.0" step="0.5" min="0" max="30">
+                  <span class="input-unit">%</span>
+                </div>
+              </div>
+
+              <div class="threshold-input-row">
+                <label for="threshMaxTemp" class="thresh-label">Maximum Temperature (°C)</label>
+                <div class="input-with-unit">
+                  <input type="number" id="threshMaxTemp" class="styled-input font-mono" value="65.0" step="1.0" min="20" max="100">
+                  <span class="input-unit">°C</span>
+                </div>
+              </div>
+
+              <div class="mt-3">
+                <button class="btn btn-secondary btn-sm" id="btnSaveThresholds" type="button">
+                  <span class="material-symbols-outlined icon-xs">save</span>
+                  <span>Save Thresholds</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Hardware & Sensor Node Integration -->
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title-group">
+                <span class="material-symbols-outlined text-emerald">router</span>
+                <h3 class="card-title">Hardware Sensors & Microcontroller</h3>
+              </div>
+              <span class="badge badge-emerald">Online</span>
+            </div>
+            <div class="card-body">
+              <div class="hw-spec-grid">
+                <div class="hw-item">
+                  <div class="hw-name">ESP32 Node ID</div>
+                  <div class="hw-val font-mono text-emerald">ESP32-A104</div>
+                  <div class="hw-desc text-muted">Dual-Core 240MHz Wi-Fi/BLE Gateway</div>
+                </div>
+                <div class="hw-item">
+                  <div class="hw-name">INA226 Sensor</div>
+                  <div class="hw-val font-mono text-blue">Voltage / Current / Power</div>
+                  <div class="hw-desc text-muted">0-36V Bi-directional High-Side I²C Monitor</div>
+                </div>
+                <div class="hw-item">
+                  <div class="hw-name">BME280 Sensor</div>
+                  <div class="hw-val font-mono text-amber">Temp / Humidity / Pressure</div>
+                  <div class="hw-desc text-muted">Environmental Micro-Climate Sensor</div>
+                </div>
+                <div class="hw-item">
+                  <div class="hw-name">MLX90640 Camera</div>
+                  <div class="hw-val font-mono text-red">Thermal Infrared Array</div>
+                  <div class="hw-desc text-muted">32×24 Radiometric Pixel Sensor</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Cloud Integration -->
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title-group">
+                <span class="material-symbols-outlined text-blue">cloud</span>
+                <h3 class="card-title">Cloud Synchronization</h3>
+              </div>
+              <span class="badge badge-slate" id="cloudStatusBadge">Demo Mode</span>
+            </div>
+            <div class="card-body">
+              <div class="setting-item">
+                <div class="setting-info">
+                  <div class="setting-title">Firebase Realtime Database</div>
+                  <div class="setting-desc">Sync live hardware telemetry from ESP32 WiFi gateway</div>
+                </div>
+                <span class="badge badge-amber font-mono">Demo Mode</span>
+              </div>
+              <div class="cloud-input-group">
+                <label for="firebaseUrlInput" class="thresh-label">Database URL (Optional)</label>
+                <input type="text" id="firebaseUrlInput" class="styled-input font-mono" placeholder="https://solarpulse-ai-default-rtdb.firebaseio.com" disabled>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- ================= MOBILE BOTTOM NAVIGATION ================= -->
+    <nav class="mobile-bottom-nav" id="mobileNav">
+      <a href="#dashboard" class="mobile-nav-item active" data-section="dashboard">
+        <span class="material-symbols-outlined">dashboard</span>
+        <span>Home</span>
+      </a>
+      <a href="#analytics" class="mobile-nav-item" data-section="analytics">
+        <span class="material-symbols-outlined">monitoring</span>
+        <span>Analytics</span>
+      </a>
+      <a href="#aiscan" class="mobile-nav-item" data-section="aiscan">
+        <span class="material-symbols-outlined">document_scanner</span>
+        <span>AI Scan</span>
+      </a>
+      <a href="#alerts" class="mobile-nav-item" data-section="alerts">
+        <span class="material-symbols-outlined">warning</span>
+        <span>Alerts</span>
+      </a>
+      <a href="#settings" class="mobile-nav-item" data-section="settings">
+        <span class="material-symbols-outlined">settings</span>
+        <span>Settings</span>
+      </a>
+    </nav>
+
+    <!-- Toast Notification Container -->
+    <div id="toastContainer" class="toast-container" aria-live="polite"></div>
+
+  </div>
+
+  <!-- JavaScript -->
+  <script src="app.js"></script>
+</body>
+</html>
