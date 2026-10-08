@@ -224,29 +224,7 @@ Smarter Solar Maintenance
 
 SolarPulse AI — Turning solar monitoring data into smarter maintenance decisions.
 
-## 📸 Project Screenshots
 
-### 1. Dashboard
-
-<img src="https://raw.githubusercontent.com/Pradhee22/SolarPulse-AI/main/dashboard.png" alt="SolarPulse AI Dashboard" width="100%">
-
-### 2. Real-Time Sensor Telemetry
-
-<img src="https://raw.githubusercontent.com/Pradhee22/SolarPulse-AI/main/dashboardremaining.png" alt="Real-Time Sensor Telemetry" width="100%">
-
-### 3. Analytics
-
-<img src="https://raw.githubusercontent.com/Pradhee22/SolarPulse-AI/main/analytics.png" alt="SolarPulse AI Analytics" width="100%">
-
-### 4. AI Thermal Inspection
-
-<img src="https://raw.githubusercontent.com/Pradhee22/SolarPulse-AI/main/ai-scan.png" alt="AI Thermal Inspection" width="100%">
-
-### 5. Maintenance Operations
-
-<img src="https://raw.githubusercontent.com/Pradhee22/SolarPulse-AI/main/maintenance.png" alt="Maintenance Operations" width="100%">
-
-### 6. System Fault Alerts
 
 <img src="https://raw.githubusercontent.com/Pradhee22/SolarPulse-AI/main/alerts.png" alt="System Fault Alerts" width="100%">
 
